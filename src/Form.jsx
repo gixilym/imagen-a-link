@@ -4,27 +4,26 @@ import toast from "react-hot-toast";
 
 const KEY = import.meta.env.VITE_KEY;
 const DEFAULT_IMAGE =
-  "https://res.cloudinary.com/dgs55s8qh/image/upload/v1706509651/lahdwhmiv3ekoywwixhy.webp";
+  "https://res.cloudinary.com/dgs55s8qh/image/upload/v1714770522/f1uc15e9qzttwemahtq8.webp";
 
 function Form() {
   const [generatedLink, setGeneratedLink] = useState(DEFAULT_IMAGE),
     [loadLink, setLoadLink] = useState(false),
-    [disableGenerate, setDisableGenerate] = useState(false);
-
-  const onDrop = useCallback(acceptedFiles => console.info(acceptedFiles), []),
+    [disableGenerate, setDisableGenerate] = useState(false),
+    onDrop = useCallback(acceptedFiles => console.info(acceptedFiles), []),
     { getRootProps, getInputProps, acceptedFiles } = useDropzone({
       onDrop,
     });
 
   const [lastFile, setLastFile] = useState(acceptedFiles[0] ?? false);
 
-  useEffect(() => setGeneratedLink("Press 'Generate Link'"), []);
+  useEffect(() => setGeneratedLink("Clic en 'generar link'"), []);
 
   useEffect(() => {
     if (acceptedFiles[0]) {
       setLastFile(acceptedFiles[0]);
       setDisableGenerate(false);
-      setGeneratedLink("Press 'Generate Link'");
+      setGeneratedLink("Clic en 'generar link'");
     }
   }, [acceptedFiles]);
 
@@ -35,8 +34,8 @@ function Form() {
 
     if (!acceptedFiles[0]) {
       setGeneratedLink(DEFAULT_IMAGE);
-      const time = setTimeout(() => setLoadLink(false), 1500);
-      return () => clearTimeout(time);
+      const timer = setTimeout(() => setLoadLink(false), 1500);
+      return () => clearTimeout(timer);
     }
 
     const formData = new FormData();
@@ -64,14 +63,14 @@ function Form() {
   }
 
   function copyLinkToClipboard(link) {
-    if (link == "Press 'Generate Link'") return;
+    if (link == "Clic en 'generar link'") return;
 
     navigator.clipboard.writeText(link);
-    toast.success("Copy link to clipboard");
+    toast.success("Link copiado");
   }
 
   function errorMsg() {
-    toast.error("You already have the link to that image!");
+    toast.error("Ya generaste un link para esa imagen!");
   }
 
   return (
@@ -80,7 +79,7 @@ function Form() {
       className="w-full h-full px-4 md:px-6 py-6 md:py-8 flex flex-col items-center md:items-start justify-between gap-y-10 sm:rounded-lg bg-gray-800 border-y-2 sm:border-2 border-gray-600"
     >
       <h1 className="text-3xl md:text-4xl text-balance font-bold text-center w-full text-white">
-        Convert <span className="text-green-300">Image</span> to{" "}
+        <span className="text-green-300">Imagen</span> a{" "}
         <span className="text-blue-400">Link</span>
       </h1>
 
@@ -91,57 +90,58 @@ function Form() {
         >
           <input {...getInputProps()} />
           <p className="text-slate-200 italic select-none text-center text-balance">
-            Drop the file or click here
+            Suelta la imagen o haz cic aquí
           </p>
         </div>
 
         {acceptedFiles[0] ? (
           <img
             src={URL.createObjectURL(acceptedFiles[0])}
-            alt="Image Selected"
+            alt="Imagen seleccionada"
             className="h-28 sm:h-full w-2/6 max-w-36 self-center"
           />
         ) : lastFile ? (
           <img
             src={URL.createObjectURL(lastFile)}
-            alt="Image Selected"
+            alt="Imagen seleccionada"
             className="h-28 sm:h-full w-2/6 max-w-36 self-center"
           />
         ) : (
           <img
             src={DEFAULT_IMAGE}
-            alt="Image Selected"
+            alt="Imagen seleccionada"
             className="h-28 sm:h-full w-2/6 max-w-36 self-center"
           />
         )}
       </section>
 
       <button
+        title="generar link"
         className="opacity-100 w-full self-center py-2 font-semibold rounded-lg text-white capitalize text-xl md:text-2xl duration-75 border bg-indigo-600 hover:scale-95 hover:bg-indigo-700"
         type={disableGenerate ? "button" : "submit"}
         onClick={disableGenerate ? errorMsg : null}
       >
-        generate link
+        generar link
       </button>
 
       <footer className="w-full flex flex-col justify-center items-start gap-y-2">
         <h2 className="text-xl font-semibold dark:text-gray-100">
-          Your new link:
+          Nuevo link:
         </h2>
         <div className="p-2 w-full h-12 rounded-lg bg-gray-700 flex justify-center items-center border-2 border-gray-500 relative overflow-hidden">
           {loadLink ? (
             <p className="text-green-400 tracking-wider font-semibold text-xl capitalize text-start w-full">
-              generating link...
+              generando link...
             </p>
           ) : (
             <a
               className={
-                generatedLink == "Press 'Generate Link'"
+                generatedLink == "Clic en 'generar link'"
                   ? "text-blue-400 w-full text-start text-lg md:text-xl"
                   : "text-blue-400 w-full text-start hover:underline text-lg md:text-xl"
               }
               href={
-                generatedLink == "Press 'Generate Link'" ? null : generatedLink
+                generatedLink == "Clic en 'generar link'" ? null : generatedLink
               }
               target="_blank"
               rel="noreferrer"
@@ -152,7 +152,7 @@ function Form() {
           <svg
             onClick={() => copyLinkToClipboard(generatedLink)}
             className={
-              generatedLink == "Press 'Generate Link'"
+              generatedLink == "Clic en 'generar link'"
                 ? "w-8 h-8 top-1.3 right-1 absolute duration-75"
                 : "w-8 h-8 top-1.3 right-1 absolute duration-75 cursor-pointer hover:scale-110"
             }
