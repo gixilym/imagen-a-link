@@ -90,7 +90,7 @@ function Form() {
         >
           <input {...getInputProps()} />
           <p className="text-slate-200 italic select-none text-center text-balance">
-            Suelta la imagen o haz cic aquí
+            Suelta la imagen o haz clic aquí
           </p>
         </div>
 
