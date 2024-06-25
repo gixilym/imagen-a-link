@@ -1,29 +1,31 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
+import coverImage from "../public/cover.webp";
 
-const KEY = import.meta.env.VITE_KEY;
-const DEFAULT_IMAGE =
-  "https://res.cloudinary.com/dgs55s8qh/image/upload/v1714770522/f1uc15e9qzttwemahtq8.webp";
+const key = import.meta.env.VITE_KEY,
+  generateLinkText = "Clic en 'generar link'",
+  coverURL =
+    "https://res.cloudinary.com/dgs55s8qh/image/upload/v1714770522/f1uc15e9qzttwemahtq8.webp";
 
 function Form() {
-  const [generatedLink, setGeneratedLink] = useState(DEFAULT_IMAGE),
+  const [generatedLink, setGeneratedLink] = useState(coverURL),
     [loadLink, setLoadLink] = useState(false),
     [disableGenerate, setDisableGenerate] = useState(false),
     onDrop = useCallback(acceptedFiles => console.info(acceptedFiles), []),
     { getRootProps, getInputProps, acceptedFiles } = useDropzone({
       onDrop,
-    });
+    }),
+    [lastFile, setLastFile] = useState(acceptedFiles[0] ?? false),
+    errorMsg = () => toast.error("¡Ya generaste un link para esa imagen!");
 
-  const [lastFile, setLastFile] = useState(acceptedFiles[0] ?? false);
-
-  useEffect(() => setGeneratedLink("Clic en 'generar link'"), []);
+  useEffect(() => setGeneratedLink(generateLinkText), []);
 
   useEffect(() => {
     if (acceptedFiles[0]) {
       setLastFile(acceptedFiles[0]);
       setDisableGenerate(false);
-      setGeneratedLink("Clic en 'generar link'");
+      setGeneratedLink(generateLinkText);
     }
   }, [acceptedFiles]);
 
@@ -33,7 +35,7 @@ function Form() {
     setDisableGenerate(true);
 
     if (!acceptedFiles[0]) {
-      setGeneratedLink(DEFAULT_IMAGE);
+      setGeneratedLink(coverURL);
       const timer = setTimeout(() => setLoadLink(false), 1500);
       return () => clearTimeout(timer);
     }
@@ -43,7 +45,7 @@ function Form() {
     try {
       formData.append("file", acceptedFiles[0]);
       formData.append("upload_preset", "arjhb0vs");
-      formData.append("api_key", KEY);
+      formData.append("api_key", key);
 
       const res = await fetch(
           "https://api.cloudinary.com/v1_1/dgs55s8qh/image/upload",
@@ -63,14 +65,10 @@ function Form() {
   }
 
   function copyLinkToClipboard(link) {
-    if (link == "Clic en 'generar link'") return;
+    if (link == generateLinkText) return;
 
     navigator.clipboard.writeText(link);
     toast.success("Link copiado");
-  }
-
-  function errorMsg() {
-    toast.error("Ya generaste un link para esa imagen!");
   }
 
   return (
@@ -88,7 +86,7 @@ function Form() {
           className="flex font-semibold text-xl md:text-2xl justify-center items-center bg-slate-600 w-full md:w-4/6 min-h-20 border-2 border-dashed rounded-lg h-full px-6"
           {...getRootProps()}
         >
-          <input {...getInputProps()} />
+          <input {...getInputProps()} accept="image/*" multiple={false} />
           <p className="text-slate-200 italic select-none text-center text-balance">
             Suelta la imagen o haz clic aquí
           </p>
@@ -97,19 +95,19 @@ function Form() {
         {acceptedFiles[0] ? (
           <img
             src={URL.createObjectURL(acceptedFiles[0])}
-            alt="Imagen seleccionada"
+            alt="Imagen generada"
             className="h-28 sm:h-full w-2/6 max-w-36 self-center"
           />
         ) : lastFile ? (
           <img
             src={URL.createObjectURL(lastFile)}
-            alt="Imagen seleccionada"
+            alt="Imagen generada"
             className="h-28 sm:h-full w-2/6 max-w-36 self-center"
           />
         ) : (
           <img
-            src={DEFAULT_IMAGE}
-            alt="Imagen seleccionada"
+            src={coverImage}
+            alt="Imagen por defecto"
             className="h-28 sm:h-full w-2/6 max-w-36 self-center"
           />
         )}
@@ -136,13 +134,11 @@ function Form() {
           ) : (
             <a
               className={
-                generatedLink == "Clic en 'generar link'"
+                generatedLink == generateLinkText
                   ? "text-blue-400 w-full text-start text-lg md:text-xl"
                   : "text-blue-400 w-full text-start hover:underline text-lg md:text-xl"
               }
-              href={
-                generatedLink == "Clic en 'generar link'" ? null : generatedLink
-              }
+              href={generatedLink == generateLinkText ? null : generatedLink}
               target="_blank"
               rel="noreferrer"
             >
@@ -152,7 +148,7 @@ function Form() {
           <svg
             onClick={() => copyLinkToClipboard(generatedLink)}
             className={
-              generatedLink == "Clic en 'generar link'"
+              generatedLink == generateLinkText
                 ? "w-8 h-8 top-1.3 right-1 absolute duration-75 bg-gray-500 rounded-md p-0.5"
                 : "w-8 h-8 top-1.3 right-1 absolute duration-75 cursor-pointer hover:scale-110 bg-gray-600 hover:bg-gray-500 rounded-md p-0.5"
             }

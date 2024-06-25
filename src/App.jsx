@@ -1,5 +1,5 @@
-import Form from "./Form.jsx";
 import { Toaster } from "react-hot-toast";
+import Form from "./Form.jsx";
 
 function App() {
   return (
