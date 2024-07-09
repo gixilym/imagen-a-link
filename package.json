@@ -4,6 +4,11 @@
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
+  "author": {
+    "name": "gixi",
+    "url": "https://github.com/gixilym/imagen-a-link",
+    "email": "gixi.tsx@gmail.com"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build"
