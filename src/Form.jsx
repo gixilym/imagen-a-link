@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import toast from "react-hot-toast";
-import coverImage from "../public/cover.webp";
+import coverImage from "/cover.webp";
 
 const key = import.meta.env.VITE_KEY,
   generateLinkText = "Clic en 'generar link'",
