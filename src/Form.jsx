@@ -64,7 +64,7 @@ function Form() {
     }
   }
 
-  function copyLinkToClipboard(link) {
+  function copy(link) {
     if (link == generateLinkText) return;
 
     navigator.clipboard.writeText(link);
@@ -146,7 +146,7 @@ function Form() {
             </a>
           )}
           <svg
-            onClick={() => copyLinkToClipboard(generatedLink)}
+            onClick={() => copy(generatedLink)}
             className={
               generatedLink == generateLinkText
                 ? "w-8 h-8 top-1.3 right-1 absolute duration-75 bg-gray-500 rounded-md p-0.5"
